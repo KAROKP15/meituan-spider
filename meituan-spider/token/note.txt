@@ -1,0 +1,25 @@
+1.使用request.get()的时候，在编辑器中输出了获取到的网站信息，和在浏览器中查看的源码对比少了爬虫目标的那一段，用selenium测试也出现网站报错信息，想爬的那一块没有被加载出来
+
+import requests
+from bs4 import BeautifulSoup
+import time
+
+# 模拟登录
+login_url = 'https://passport.meituan.com/account/unitivelogin?service=www&continue=https%3A%2F%2Fwww.meituan.com%2Faccount%2Fsettoken%3Fcontinue%3Dhttps%253A%252F%252Fwh.meituan.com%252F'
+password = 'ZksbS85T5fhlxyl9i5lWh4U2Vj+j3KRWeIOnasFvaECBWHakxd2pKrPvEuQ6DiGL9+05NpBYjuhNzLn2kOHC4Ol9QK9mySxfgNIcMSrADA1qhs5b2LOtZYBnlJkJnBFOY4c+eR6vgF4TSsY5SGYS0b66y7w8cRtb2+fgZ+32G+8='
+login_data = {'username':'18986039667', 'password':password}
+
+# 伪装成浏览器，agent表示请求的身份
+user_agent = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/74.0.3729.169 Safari/537.36'
+login_headers = {'User-Agent':user_agent}
+
+login_page = requests.get(url = login_url, data = login_data, headers = login_headers)
+print(login_page.status_code)
+
+url = 'https://wh.meituan.com/meishi/pn1/'
+headers = {'User-Agent':user_agent}
+page = requests.get(url = url, headers = headers)
+print(page.status_code)
+soup = BeautifulSoup(page.text, 'html.parser')
+print(soup)
+
